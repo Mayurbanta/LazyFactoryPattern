@@ -1,8 +1,9 @@
 ﻿using LazyFactoryPattern.Services;
+using System;
 
 namespace LazyFactoryPattern
 {
-    public class Engine
+    public class Engine : IDisposable
     {
         private readonly IDbContextFactory _dbContextFactory;
 
@@ -11,15 +12,29 @@ namespace LazyFactoryPattern
             _dbContextFactory = dbContextFactory;
         }
 
+        public void Dispose()
+        {
+            Console.WriteLine($"{nameof(Engine)} dispose called...");
+            _dbContextFactory.Dispose();
+        }
+
         public void DoSomething()
         {
             _dbContextFactory.Create(ContextType.AdonetContext);
 
             var efContext = _dbContextFactory.Create(ContextType.EfContext);
-            _ = efContext.SaveChanges();
+            using (efContext)
+            {
+                _ = efContext.SaveChanges();
+            }
+
+
 
             var adoContext = _dbContextFactory.Create(ContextType.AdonetContext);
-            _ = adoContext.SaveChanges();
+            using (adoContext)
+            {
+                _ = adoContext.SaveChanges();
+            }
         }
     }
 }

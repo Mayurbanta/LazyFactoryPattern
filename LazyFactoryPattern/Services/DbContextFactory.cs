@@ -2,7 +2,7 @@
 
 namespace LazyFactoryPattern.Services
 {
-    public interface IDbContextFactory
+    public interface IDbContextFactory: IDisposable
     {
         IDbContext Create(ContextType contextType);
     }
@@ -19,6 +19,11 @@ namespace LazyFactoryPattern.Services
         public IDbContext Create(ContextType contextType)
         {
             return _context(contextType);
+        }
+
+        public void Dispose()
+        {
+            Console.WriteLine($"{nameof(DbContextFactory)} dispose called...");
         }
     }
 }

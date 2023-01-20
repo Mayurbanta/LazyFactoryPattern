@@ -14,7 +14,10 @@ namespace LazyFactoryPattern
             IServiceProvider provider = ConfigureServices();
 
             var engine = provider.GetRequiredService<Engine>();
-            engine.DoSomething();
+            using (engine)
+            {
+                engine.DoSomething();
+            }
 
             Console.Read();
         }

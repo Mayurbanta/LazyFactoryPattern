@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LazyFactoryPattern.Services
 {
-   public interface IDbContext
+   public interface IDbContext: IDisposable
     {
         string SaveChanges();
     }
